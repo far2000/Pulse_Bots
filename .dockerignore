@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+.Python
+build/
+dist/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtualenvs
+.venv/
+venv/
+env/
+
+# Local config & secrets — must NEVER be in the image
+.env
+.env.local
+.env.*.local
+
+# Telethon session files (also secrets)
+*.session
+*.session-journal
+
+# Git & CI
+.git/
+.github/
+.gitignore
+
+# IDE & OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Logs and temp
+*.log
+logs/
+tmp/
+.tmp/
+
+# uv lock — let the container resolve fresh (optional; remove if you want reproducible builds)
+# uv.lock

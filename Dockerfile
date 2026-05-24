@@ -22,12 +22,13 @@ RUN pip install --no-cache-dir uv
 
 WORKDIR /app
 
-# Cache deps layer
-COPY pyproject.toml ./
-RUN uv pip install --system --no-cache .
-
-# Now the source
+# Copy the whole source tree before installing.
+# We can't split deps and source the usual way because hatchling needs both
+# README.md AND the `shared/` + `bots/` packages on disk to build the wheel
+# (see pyproject.toml: [tool.hatch.build.targets.wheel] packages = …).
 COPY . .
+
+RUN uv pip install --system --no-cache .
 
 # Non-root user
 RUN useradd --create-home --shell /bin/bash app && chown -R app:app /app
