@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+.Python
+build/
+dist/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Environments
+.env
+.env.local
+.env.*.local
+.venv/
+venv/
+env/
+
+# Telethon
+*.session
+*.session-journal
+
+# IDE
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Logs and temp
+*.log
+logs/
+tmp/
+.tmp/
+
+# uv
+uv.lock

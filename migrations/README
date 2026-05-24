@@ -1,0 +1,7 @@
+Async Alembic migrations for Pulse Bots.
+
+Create a new revision:
+    uv run alembic revision --autogenerate -m "describe change"
+
+Apply migrations:
+    uv run alembic upgrade head
