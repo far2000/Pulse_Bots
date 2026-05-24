@@ -8,10 +8,10 @@ from __future__ import annotations
 
 from enum import Enum
 from functools import lru_cache
-from typing import Literal
+from typing import Annotated, Literal
 
 from pydantic import Field, field_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 
 class BotType(str, Enum):
@@ -61,7 +61,10 @@ class Settings(BaseSettings):
     # ── aiogram bot ────────────────────────────────────────────────────────
     bot_token: str = ""
     destination_channel_id: int = 0
-    admin_ids: list[int] = Field(default_factory=list)
+    # `NoDecode` tells pydantic-settings to skip its built-in JSON parse for
+    # list/complex types — otherwise it tries json.loads("111,222") and dies.
+    # Our `_split_admin_ids` validator then handles the comma-separated string.
+    admin_ids: Annotated[list[int], NoDecode] = Field(default_factory=list)
 
     # ── LLM (Avalai — OpenAI-compatible gateway) ───────────────────────────
     avalai_api_key: str = ""
@@ -78,10 +81,12 @@ class Settings(BaseSettings):
 
     @field_validator("admin_ids", mode="before")
     @classmethod
-    def _split_admin_ids(cls, v: str | list[int]) -> list[int]:
+    def _split_admin_ids(cls, v: str | list[int] | None) -> list[int]:
+        if v is None or v == "":
+            return []
         if isinstance(v, str):
-            return [int(x) for x in v.split(",") if x.strip()]
-        return v
+            return [int(x.strip()) for x in v.split(",") if x.strip()]
+        return list(v)
 
     @property
     def is_production(self) -> bool:
